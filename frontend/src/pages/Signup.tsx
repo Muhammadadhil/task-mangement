@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
@@ -6,14 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import PasswordField from "@/components/passwordField";
-import { signUp } from "@/api/auth"; // Assuming you have this function
+import { signUp } from "@/api/auth";
 
 interface SignupFormData {
     name: string;
     email: string;
     password: string;
     confirmPassword: string;
-    userType: string; // Assuming you're collecting user type based on your routing
+    userType: string;
 }
 
 interface SignupResponse {
@@ -23,20 +24,18 @@ interface SignupResponse {
             email: string;
             name: string;
             userType: string;
-            // Add other user properties
         };
         accessToken: string;
     };
 }
 
 const SignupPage: React.FC = () => {
-
     const [formData, setFormData] = useState<SignupFormData>({
         name: "",
         email: "",
         password: "",
         confirmPassword: "",
-        userType: "user", // Default user type, adjust as needed
+        userType: "user",
     });
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -62,7 +61,6 @@ const SignupPage: React.FC = () => {
             return false;
         }
 
-        // Basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(formData.email)) {
             toast.error("Please enter a valid email address");
@@ -96,15 +94,11 @@ const SignupPage: React.FC = () => {
 
         try {
             setIsLoading(true);
-
-            // Omit confirmPassword from the API call
             const { confirmPassword, ...signupData } = formData;
-            console.log("confirmPassword:", confirmPassword);
-
+            console.log(confirmPassword);
             const response = (await signUp(signupData)) as SignupResponse;
             setIsLoading(false);
 
-            // Use the context login function
             login({
                 user: response.data.user,
                 accessToken: response.data.accessToken,
@@ -125,17 +119,17 @@ const SignupPage: React.FC = () => {
     };
 
     return (
-        <div className="flex w-full h-screen min-h-screen bg-gradient-to-b from-green-50 dark:from-green-950 to-white dark:to-black items-center justify-center transition-colors duration-300">
+        <div className="flex w-full h-screen bg-gray-50">
             {isLoading ? (
-                <div className="animate-spin h-5 w-5 border-b-2 border-blue-500"></div>
+                <div className="animate-spin h-5 w-5 border-b-2 border-lime-400 m-auto"></div>
             ) : (
-                <div className="w-[32rem] h-[42rem] lg:w-12/12 bg-white dark:bg-black border border-gray-200 dark:border-gray-800 flex items-center justify-center rounded-2xl shadow-md">
-                    <div className="max-w-md w-full space-y-6 p-8">
-                        <h2 className="mt-4 text-center text-2xl font-semibold text-gray-900 dark:text-white">Create your account</h2>
+                <div className="w-full max-w-[1200px] h-full mx-auto flex items-center justify-between p-8">
+                    <div className="w-[440px]">
+                        <h1 className="text-2xl font-semibold text-gray-900 mb-8">Create your account</h1>
 
-                        <form className="mt-6 space-y-5" onSubmit={handleSignupSubmit}>
-                            <div className="rounded-md shadow-sm space-y-2">
-                                <Label htmlFor="name" className="text-gray-700 dark:text-gray-300">
+                        <form onSubmit={handleSignupSubmit} className="space-y-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="name" className="text-sm text-gray-600">
                                     Full Name
                                 </Label>
                                 <Input
@@ -144,43 +138,59 @@ const SignupPage: React.FC = () => {
                                     type="text"
                                     value={formData.name}
                                     onChange={handleInputChange}
-                                    className="w-full bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white"
-                                    placeholder="Enter your full name"
+                                    className="w-full h-12 bg-white border border-gray-200 rounded-lg px-4"
+                                    placeholder="John Doe"
                                 />
                             </div>
 
-                            <div className="rounded-md shadow-sm space-y-2">
-                                <Label htmlFor="email-address" className="text-gray-700 dark:text-gray-300">
-                                    Email address
+                            <div className="space-y-2">
+                                <Label htmlFor="email" className="text-sm text-gray-600">
+                                    Email
                                 </Label>
                                 <Input
-                                    id="email-address"
+                                    id="email"
                                     name="email"
                                     type="email"
                                     value={formData.email}
                                     onChange={handleInputChange}
-                                    className="w-full bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white"
-                                    placeholder="Enter your email"
+                                    className="w-full h-12 bg-white border border-gray-200 rounded-lg px-4"
+                                    placeholder="johndoe@gmail.com"
                                 />
                             </div>
 
-                            <PasswordField value={formData.password} onChange={handleInputChange} name="password" label="Password" placeholder="Create a password" />
+                            <div className="space-y-2">
+                                <PasswordField
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                    name="password"
+                                    placeholder="Create a password"
+                                />
+                            </div>
 
-                            <PasswordField value={formData.confirmPassword} onChange={handleInputChange} name="confirmPassword" label="Confirm Password" placeholder="Confirm your password" />
+                            <div className="space-y-2">
+                                <PasswordField
+                                    value={formData.confirmPassword}
+                                    onChange={handleInputChange}
+                                    name="confirmPassword"
+                                    placeholder="Confirm your password"
+                                />
+                            </div>
 
-                            <Button type="submit" className="w-full bg-green-800 hover:bg-green-900 dark:bg-green-700 dark:hover:bg-green-800 text-white">
+                            <Button type="submit" className="w-full h-12 bg-lime-400 hover:bg-lime-500 text-white rounded-lg font-medium">
                                 Create Account
                             </Button>
-                        </form>
 
-                        <div className="text-center">
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                            <div className="text-center text-sm text-gray-600">
                                 Already have an account?{" "}
-                                <Link to="/login" className="text-green-800 dark:text-green-500 hover:text-green-700 dark:hover:text-green-400">
+                                <Link to="/login" className="text-lime-500 hover:text-lime-600">
                                     Sign in
                                 </Link>
-                            </span>
-                        </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div className="flex-1 flex justify-center items-center">
+                        <img src="../assets/videoframe_2125.png" alt="Decorative cube illustration" className=" w-[600px] h-auto" />
                     </div>
                 </div>
             )}

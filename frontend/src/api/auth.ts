@@ -6,7 +6,7 @@ export const signIn = async (formData: signInData) => {
 };
 
 export const signUp = async (formData: ISignupData) => {
-    return await apiClient.post("/user/auth/register", {
+    return await apiClient.post("/register", {
         formData,
     });
 };

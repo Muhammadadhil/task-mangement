@@ -31,7 +31,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({ value, onChange, name = "
                     type={showPassword ? "text" : "password"}
                     value={value}
                     onChange={onChange}
-                    className="w-full bg-white dark:bg-black border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white pr-10"
+                    className="w-full bg-white dark:bg-black h-12 border-gray-100 dark:border-gray-700 text-gray-900 dark:text-white pr-10"
                     placeholder={placeholder}
                 />
                 <button type="button" className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500" onClick={togglePasswordVisibility}>
