@@ -4,11 +4,13 @@ import { Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/Login";
 import SignupPage from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
+import HomePage from "./pages/Home";
 
 function App() {
     return (
         <TaskProvider>
             <Routes>
+                <Route path="/" element={<HomePage/>}/>
                 <Route
                     path="/dashboard"
                     element={
