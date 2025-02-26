@@ -12,16 +12,3 @@ export const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-export const resetPasswordSchema = Joi.object({
-  password: Joi.string().min(8).required(),
-});
-
-export const updateProfileSchema = Joi.object({
-  name: Joi.string().max(50),
-  email: Joi.string().email(),
-}).min(1);
-
-export const changePasswordSchema = Joi.object({
-  currentPassword: Joi.string().required(),
-  newPassword: Joi.string().min(8).required(),
-});

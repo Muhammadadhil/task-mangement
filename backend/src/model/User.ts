@@ -52,9 +52,13 @@ UserSchema.methods.comparePassword = async function (password: string): Promise<
 UserSchema.methods.generateAuthToken = function (): string {
   return jwt.sign(
     { id: this._id, email: this.email },
-    process.env.JWT_SECRET || 'default_jwt_secret',
-    { expiresIn: process.env.JWT_EXPIRE || '30d' } as jwt.SignOptions
+    process.env.JWT_SECRET || '',
+    { expiresIn: process.env.JWT_EXPIRE || '40m' } as jwt.SignOptions
   );
+};
+
+UserSchema.methods.generateRefreshToken = function (): string {
+    return jwt.sign({ id: this._id, email: this.email }, process.env.JWT_REFRESH_SECRET || "", { expiresIn: process.env.JWT_EXPIRE || "30d" } as jwt.SignOptions);
 };
 
 export default mongoose.model<IUser>('User', UserSchema);

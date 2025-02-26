@@ -1,8 +1,21 @@
+export enum TaskCategory {
+    WORK = "work",
+    STUDY = "study",
+    PERSONAL = "personal",
+}
+
+export enum taskStatus {
+    PENDING = "pending",
+    COMPLETED = "completed",
+}
+
+
 export interface Task {
-    id: string;
+    _id: string;
+    user: string;
     title: string;
     description: string;
     dueDate: string;
-    completed: boolean;
-    project: string | null;
+    status: taskStatus;
+    category: TaskCategory;
 }

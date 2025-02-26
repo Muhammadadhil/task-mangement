@@ -5,6 +5,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectMongoDB, errorHandler } from "@_opportune/common";
 import morgan from 'morgan'
+import http from 'http';
+import { initSocketServer } from "./config/socketServer";
 
 const app = express();
 dotenv.config();
@@ -34,8 +36,13 @@ app.use("/", router);
 
 connectMongoDB(process.env.MONGODB_URL!,"Task-mangagement");
 
+const server = http.createServer(app);
+
+initSocketServer(server);
+
 const PORT = process.env.PORT || 3199;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Backend server is running on the port ${PORT}`);
+    console.log(`Socket.io server available at ws://localhost:${PORT}/socket.io/`);
 });

@@ -21,7 +21,7 @@ export const TaskList: React.FC<TaskListProps> = ({ activeFilter }) => {
     return (
         <div className="bg-white rounded-md shadow-sm">
             {tasks.map((task) => (
-                <TaskItem key={task.id} task={task} />
+                <TaskItem key={task._id} task={task} />
             ))}
         </div>
     );

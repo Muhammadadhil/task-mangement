@@ -36,6 +36,7 @@ export const register = async (req: Request, res: Response, next: NextFunction):
 
         // Generate token
         const accessToken = user.generateAuthToken();
+        const refreshToken = user.generateRefreshToken();
 
         // Return user without password
         const userWithoutPassword = {
@@ -46,11 +47,11 @@ export const register = async (req: Request, res: Response, next: NextFunction):
         };
 
         // Set cookie
-        res.cookie("refreshToken", accessToken, {
+        res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
         });
 
         res.status(201).json({
@@ -91,6 +92,8 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 
         // Generate token
         const accessToken = user.generateAuthToken();
+        const refreshToken = user.generateRefreshToken();
+
 
         // Return user without password
         const userWithoutPassword = {
@@ -101,11 +104,11 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
         };
 
         // Set cookie
-        res.cookie("refreshToken", accessToken, {
+        res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days
         });
 
         res.status(200).json({

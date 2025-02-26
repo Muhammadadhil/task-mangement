@@ -19,4 +19,5 @@ export interface IUser extends Document {
     updatedAt: Date;
     comparePassword(password: string): Promise<boolean>;
     generateAuthToken(): string;
+    generateRefreshToken(): string;
 }

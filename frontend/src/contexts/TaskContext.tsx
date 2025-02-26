@@ -1,8 +1,13 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { Task } from "@/types/task";
+import { io, Socket } from "socket.io-client";
+import { Task, taskStatus } from "@/types/task";
+import { useAuth } from "./AuthContext";
+import { getTasks } from "@/api/tasks";
+import { toast } from "sonner";
 
 interface TaskContextProps {
     tasks: Task[];
+    isConnected: boolean;
     addTask: (task: Omit<Task, "id">) => void;
     editTask: (id: string, updates: Partial<Task>) => void;
     deleteTask: (id: string) => void;
@@ -12,29 +17,76 @@ interface TaskContextProps {
 const TaskContext = createContext<TaskContextProps | undefined>(undefined);
 
 export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [tasks, setTasks] = useState<Task[]>(() => {
-        const savedTasks = localStorage.getItem("tasks");
-        return savedTasks ? JSON.parse(savedTasks) : [];
-    });
+
+    const [socket, setSocket] = useState<Socket | null>(null);
+    const [isConnected, setIsConnected] = useState(false);
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const { user } = useAuth();
 
     useEffect(() => {
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-    }, [tasks]);
+        const socketInstance = io(import.meta.env.VITE_SOCKET_BACKEND_API || "http://localhost:3199", {
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000,
+            transports: ["websocket", "polling"], 
+        });
+
+        socketInstance.on("connect", async () => {
+
+            console.log("Socket connected");
+            setIsConnected(true);
+
+            const previousTasks = await getTasks(user?.id || '');
+            setTasks(previousTasks);
+        });
+
+        socketInstance.on("disconnect", () => {
+            console.log("Socket disconnected");
+            setIsConnected(false);
+        });
+
+        socketInstance.on("task:added", (newTask: Task) => {
+            setTasks((prevTasks) => [...prevTasks, newTask]);
+        });
+
+        socketInstance.on("task:updated", (updatedTask: Task) => {
+            setTasks((prevTasks) => prevTasks.map((task) => (task._id === updatedTask._id ? updatedTask : task)));
+        });
+
+        socketInstance.on("task:deleted", (taskId: string) => {
+            toast('task successfully deleted');
+            setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
+        });
+
+        socketInstance.on("task:error", (error) => {
+            console.error("Socket error:", error.message);
+            toast.error(error.message);
+        });
+
+        setSocket(socketInstance);
+
+        // Cleanup on unmount
+        return () => {
+            socketInstance.disconnect();
+        };
+    }, []);
 
     const addTask = (taskData: Omit<Task, "id">) => {
-        const newTask: Task = {
-            ...taskData,
-            id: Date.now().toString(),
-        };
-        setTasks([...tasks, newTask]);
+        if (socket && isConnected) {
+            socket.emit("task:add", taskData);
+        }
     };
 
     const editTask = (id: string, updates: Partial<Task>) => {
-        setTasks(tasks.map((task) => (task.id === id ? { ...task, ...updates } : task)));
+        if (socket && isConnected) {
+            socket.emit("task:update", { taskId: id, updatedData: updates });
+        }
     };
 
     const deleteTask = (id: string) => {
-        setTasks(tasks.filter((task) => task.id !== id));
+        if (socket && isConnected) {
+            socket.emit("task:delete", id);
+        }
     };
 
     const filteredTasks = (filter: string) => {
@@ -44,15 +96,28 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             case "today":
                 return tasks.filter((task) => new Date(task.dueDate).toISOString().split("T")[0] === today);
             case "inbox":
-                return tasks.filter((task) => !task.completed);
+                return tasks.filter((task) => task.status != taskStatus.COMPLETED);
             case "upcoming":
                 return tasks.filter((task) => new Date(task.dueDate).toISOString().split("T")[0] > today);
             default:
-                return tasks.filter((task) => task.project === filter);
+                return tasks.filter((task) => task.category === filter);
         }
     };
 
-    return <TaskContext.Provider value={{ tasks, addTask, editTask, deleteTask, filteredTasks }}>{children}</TaskContext.Provider>;
+    return (
+        <TaskContext.Provider
+            value={{
+                tasks,
+                isConnected,
+                addTask,
+                editTask,
+                deleteTask,
+                filteredTasks,
+            }}
+        >
+            {children}
+        </TaskContext.Provider>
+    );
 };
 
 export const useTasks = () => {

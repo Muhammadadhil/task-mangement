@@ -19,9 +19,6 @@ export function Header() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    {/* <Button variant="ghost" className="hidden md:inline-flex">
-                        Request a demo
-                    </Button> */}
                     <Link to="/login" className="hidden md:inline-flex">
                         Log in
                     </Link>

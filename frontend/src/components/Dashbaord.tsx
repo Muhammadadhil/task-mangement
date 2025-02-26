@@ -3,7 +3,6 @@ import { Sidebar } from "./Sidebar";
 import { TaskForm } from "./TaskForm";
 import { TaskList } from "./TaskList";
 import { MenuIcon } from "lucide-react";
-import { ProfileDropdown } from "./ProfileDropdown";
 
 
 export const Dashboard: React.FC = () => {
