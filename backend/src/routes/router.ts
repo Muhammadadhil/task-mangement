@@ -1,11 +1,11 @@
-import { Router } from "express";
-const router = Router();
+import express from "express";
+import authRoutes from "./authRoutes";
+// Import other route files here
 
+const router = express.Router();
 
-router.get('/', (req, res) => {
-    console.log(req.body);
-    res.send('Hello World!');
-})
+// Base routes
+router.use("/api/auth", authRoutes);
 
 
 export default router;

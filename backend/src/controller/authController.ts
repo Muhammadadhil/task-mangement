@@ -1,20 +1,21 @@
-// src/controllers/authController.ts
 import { Request, Response, NextFunction } from "express";
-import User from "../models/User";
+import User from "../model/User";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/ApiError";
-import { sendVerificationEmail, sendPasswordResetEmail } from "../utils/emailService";
+import { sendVerificationEmail, sendPasswordResetEmail } from "../utils/EmailService";
 
 // Register new user
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const { name, email, password, userType } = req.body;
+        const { name, email, password } = req.body;
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            throw new ApiError(400, "Email already in use");
+            // throw new ApiError(400, "Email already in use");
+            res.status(400).json({message:'Email already registered'});
+            return
         }
 
         // Create verification token
@@ -25,7 +26,6 @@ export const register = async (req: Request, res: Response, next: NextFunction):
             name,
             email,
             password,
-            userType: userType || "user",
             verificationToken,
             isVerified: false,
         });
@@ -41,7 +41,6 @@ export const register = async (req: Request, res: Response, next: NextFunction):
             id: user._id,
             name: user.name,
             email: user.email,
-            userType: user.userType,
             isVerified: user.isVerified,
         };
 
@@ -61,6 +60,7 @@ export const register = async (req: Request, res: Response, next: NextFunction):
                 accessToken,
             },
         });
+
     } catch (error) {
         next(error);
     }
@@ -96,7 +96,6 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
             id: user._id,
             name: user.name,
             email: user.email,
-            userType: user.userType,
             isVerified: user.isVerified,
         };
 
@@ -125,10 +124,13 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 export const verifyEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { token } = req.params;
+        console.log('tokennn:',token);
 
         // Find user by verification token
         const user = await User.findOne({ verificationToken: token });
+
         if (!user) {
+            res.status(400).json({success:false,message:"Email verification failed"});
             throw new ApiError(400, "Invalid or expired verification token");
         }
 
@@ -141,6 +143,7 @@ export const verifyEmail = async (req: Request, res: Response, next: NextFunctio
             success: true,
             message: "Email verified successfully. You can now login.",
         });
+        
     } catch (error) {
         next(error);
     }
@@ -174,8 +177,6 @@ export const getMe = async (req: Request, res: Response, next: NextFunction): Pr
                     id: user._id,
                     name: user.name,
                     email: user.email,
-                    userType: user.userType,
-                    isVerified: user.isVerified,
                 },
             },
         });

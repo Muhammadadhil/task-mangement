@@ -104,7 +104,7 @@ const LoginPage: React.FC = () => {
                             </div>
 
                             <div className="space-y-2">
-                                <PasswordField value={formData.password} onChange={handleInputChange} className="h-12 bg-white border border-gray-200 rounded-lg" />
+                                <PasswordField value={formData.password} onChange={handleInputChange}  />
                             </div>
 
                             <Button type="submit" className="w-full h-12 bg-lime-400 hover:bg-lime-400 text-white rounded-lg font-medium">

@@ -4,10 +4,13 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectMongoDB, errorHandler } from "@_opportune/common";
+import morgan from 'morgan'
 
 const app = express();
 dotenv.config();
 app.use(cookieParser());
+app.use(morgan('dev'));
+
 
 const allowedOrigins = [process.env.LOCAL_ORIGIN?.replace(/\/$/, ""), process.env.VERCEL_ORIGIN?.replace(/\/$/, ""), process.env.PRODUCTION_ORIGIN?.replace(/\/$/, "")];
 
@@ -29,7 +32,7 @@ app.use(errorHandler);
 
 app.use("/", router);
 
-connectMongoDB(process.env.MONGODB_URL!, "user");
+connectMongoDB(process.env.MONGODB_URL!,"Task-mangagement");
 
 const PORT = process.env.PORT || 3199;
 

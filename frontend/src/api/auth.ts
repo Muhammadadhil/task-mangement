@@ -1,23 +1,27 @@
 import apiClient from "./axiosInstance";
 import { ISignupData ,signInData } from "../types/IAuth"
 
-export const signIn = async (formData: signInData) => {
-    return await apiClient.post("/user/auth/login", { email: formData.email, password: formData.password });
+export const signIn = async (data: signInData) => {
+    return await apiClient.post("/auth/login", { email: data.email, password: data.password });
 };
 
 export const signUp = async (formData: ISignupData) => {
-    return await apiClient.post("/register", {
-        formData,
-    });
+    return await apiClient.post("/auth/register", formData);
 };
 
 export const logout = async () => {
     return await apiClient.patch("/user/auth/logout");
 };
 
+export const verifyEmailApi = async (token: string) => {
+    const response = await apiClient.get(`/auth/verify-email/${token}`);
+    return response.data;
+};
+
+
 export const refreshToken = async (): Promise<string> => {
     try {
-        const response = await apiClient.get(import.meta.env.VITE_SERVER_API + "user/auth/refreshToken");
+        const response = await apiClient.get("/auth/refreshToken");
         return response.data.accessToken;
     } catch (error) {
         console.error("Failed to get refresh token", error);

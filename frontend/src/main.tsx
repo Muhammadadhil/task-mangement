@@ -7,10 +7,10 @@ import { Toaster } from "@/components/ui/sonner";
 
 
 createRoot(document.getElementById("root")!).render(
-    <StrictMode>
+    // <StrictMode>
         <BrowserRouter>
             <Toaster />
             <App />
         </BrowserRouter>
-    </StrictMode>
+    // </StrictMode>
 );
