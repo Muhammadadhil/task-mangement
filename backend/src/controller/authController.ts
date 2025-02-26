@@ -20,6 +20,7 @@ export const register = async (req: Request, res: Response, next: NextFunction):
 
         // Create verification token
         const verificationToken = crypto.randomBytes(20).toString("hex");
+        console.log('verification Token:',verificationToken);
 
         // Create new user
         const user = await User.create({

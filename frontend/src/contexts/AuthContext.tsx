@@ -1,7 +1,6 @@
 import { AuthData, User } from "@/types/IAuth";
 import React, { createContext, useState, useContext, useEffect, ReactNode } from "react";
 
-
 interface AuthContextType {
     user: User | null;
     accessToken: string | null;
@@ -25,17 +24,27 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+
     const [user, setUser] = useState<User | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [isAuthenticated,setIsAuthenticated] = useState<boolean>(false);
 
     useEffect(() => {
-        // Check if user data exists in localStorage on initial load
+
         const storedUser = localStorage.getItem("userData");
         const storedToken = localStorage.getItem("accessToken");
-
+        
         if (storedUser && storedToken) {
-            setUser(JSON.parse(storedUser));
-            setAccessToken(storedToken);
+            try {
+                setUser(JSON.parse(storedUser));
+                setAccessToken(storedToken);
+                setIsAuthenticated(true);
+                
+            } catch (error) {
+                console.error("Error parsing stored user data:", error);
+                localStorage.removeItem("userData");
+                localStorage.removeItem("accessToken");
+            }
         }
     }, []);
 
@@ -44,6 +53,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setAccessToken(authData.accessToken);
         localStorage.setItem("userData", JSON.stringify(authData.user));
         localStorage.setItem("accessToken", authData.accessToken);
+        setIsAuthenticated(true);
+
+        console.log("user: and accesstoken:", user, accessToken);
+        console.log("isAuthenticated", !!user && !!accessToken);
     };
 
     const logout = () => {
@@ -51,6 +64,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setAccessToken(null);
         localStorage.removeItem("userData");
         localStorage.removeItem("accessToken");
+        setIsAuthenticated(false);
     };
 
     return (
@@ -58,7 +72,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             value={{
                 user,
                 accessToken,
-                isAuthenticated: !!user && !!accessToken,
+                isAuthenticated,
                 login,
                 logout,
             }}

@@ -2,11 +2,13 @@ import apiClient from "./axiosInstance";
 import { ISignupData ,signInData } from "../types/IAuth"
 
 export const signIn = async (data: signInData) => {
-    return await apiClient.post("/auth/login", { email: data.email, password: data.password });
+    const response = await apiClient.post("/auth/login", { email: data.email, password: data.password });
+    return response.data;
 };
 
 export const signUp = async (formData: ISignupData) => {
-    return await apiClient.post("/auth/register", formData);
+    const response = await apiClient.post("/auth/register", formData);
+    return response.data;
 };
 
 export const logout = async () => {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { InboxIcon, CalendarIcon, ClockIcon, TagIcon, HomeIcon, PlusIcon, FolderIcon } from "lucide-react";
 import { useTasks } from "@/contexts/TaskContext";
+import { ProfileDropdown } from "./ProfileDropdown";
 
 interface SidebarProps {
     activeFilter: string;
@@ -22,10 +23,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeFilter, setActiveFilter,
         >
             <div className="flex flex-col h-full w-64 p-4">
                 <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-xl font-bold text-lime-500">Task Manager</h1>
-                    <button onClick={toggleSidebar} className="md:hidden p-2 hover:bg-gray-100 rounded-md">
-                        <PlusIcon className="rotate-45 h-5 w-5" />
-                    </button>
+                    <ProfileDropdown />
                 </div>
 
                 {/* <button className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-md text-primary mb-4">

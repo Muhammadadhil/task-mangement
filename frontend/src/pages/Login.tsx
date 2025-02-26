@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -33,7 +33,15 @@ const LoginPage: React.FC = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login,isAuthenticated } = useAuth();
+
+    useEffect(()=>{
+        if(isAuthenticated){
+            navigate('/dashboard');
+        }
+    },[isAuthenticated,navigate])
+
+
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -57,6 +65,7 @@ const LoginPage: React.FC = () => {
         try {
             setIsLoading(true);
             const response = (await signIn(formData)) as LoginResponse;
+            console.log('response',response)
             setIsLoading(false);
 
             login({
@@ -64,7 +73,8 @@ const LoginPage: React.FC = () => {
                 accessToken: response.data.accessToken,
             });
 
-            navigate("/dashboard");
+            console.log("navigatedd!!");
+
         } catch (error: unknown) {
             setIsLoading(false);
             console.log("login error:", error);

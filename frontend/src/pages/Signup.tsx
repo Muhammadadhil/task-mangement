@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
@@ -40,7 +40,7 @@ const SignupPage: React.FC = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, isAuthenticated } = useAuth();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -85,6 +85,12 @@ const SignupPage: React.FC = () => {
         return true;
     };
 
+    useEffect(()=>{
+            if(isAuthenticated){
+                navigate('/dashboard');
+            }
+        },[isAuthenticated,navigate])
+
     const handleSignupSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -104,8 +110,8 @@ const SignupPage: React.FC = () => {
                 accessToken: response.data.accessToken,
             });
 
-            toast.success("Account created successfully!");
-            navigate("/dashboard");
+            toast.success("Account created successfully , Verify your email by checking your mail");
+            
         } catch (error: unknown) {
             setIsLoading(false);
 

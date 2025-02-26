@@ -22,7 +22,7 @@ const UserSchema = new Schema<IUser>(
             type: String,
             required: [true, "Please provide a password"],
             minlength: [8, "Password must be at least 8 characters"],
-            select: false, // Don't return password by default
+            select: false, 
         },
         verificationToken: {
           type:String
@@ -35,7 +35,6 @@ const UserSchema = new Schema<IUser>(
     { timestamps: true }
 );
 
-// Hash password before saving
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
@@ -46,7 +45,6 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-// Method to compare passwords
 UserSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
 };
