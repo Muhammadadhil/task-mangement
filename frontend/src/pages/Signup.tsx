@@ -102,15 +102,11 @@ const SignupPage: React.FC = () => {
             setIsLoading(true);
             const { confirmPassword, ...signupData } = formData;
             console.log(confirmPassword);
-            const response = (await signUp(signupData)) as SignupResponse;
+            (await signUp(signupData)) as SignupResponse;
             setIsLoading(false);
 
-            login({
-                user: response.data.user,
-                accessToken: response.data.accessToken,
-            });
-
             toast.success("Account created successfully , Verify your email by checking your mail");
+            navigate("/login");
             
         } catch (error: unknown) {
             setIsLoading(false);

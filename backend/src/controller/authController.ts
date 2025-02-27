@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../model/User";
 import crypto from "crypto";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { ApiError } from "../utils/ApiError";
 import { sendVerificationEmail, sendPasswordResetEmail } from "../utils/EmailService";
 
@@ -90,8 +90,12 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
             throw new ApiError(401, "Invalid credentials");
         }
 
-        // Generate token
-        const accessToken = user.generateAuthToken();
+        if (!user.isVerified){
+            res.status(400).json({success:false,message:"Email not verified"});
+            return
+        }
+            // Generate token
+            const accessToken = user.generateAuthToken();
         const refreshToken = user.generateRefreshToken();
 
 
@@ -165,6 +169,40 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
         message: "Logged out successfully",
     });
 };
+
+
+export const refreshAccessToken = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const refreshToken = req.cookies.refreshToken;
+
+            if (!refreshToken) {
+                return res.status(400).json({ message: "No Refresh token found" });
+            }
+
+            const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESHTOKEN_SECRET!) as JwtPayload;
+            if (!decoded) {
+                console.log("invalid token");
+                // return null;
+            }
+            const { id } = decoded;
+
+            const user = await User.findOne({ _id: id });
+            if (!user) {
+                return res.status(400).json({ message: "User not found" });
+            }
+
+            const newAccessToken = user?.generateAuthToken();
+            
+            if (!newAccessToken) {
+                return res.status(400).json({ message: "Invalid refresh token" });
+            }
+            return res.status(200).json({ accessToken: newAccessToken });
+
+        } catch (error) {
+            console.error("Error refreshing access token:", error);
+            return res.status(500).json({ error: "Failed to refresh access token" });
+        }
+    }
 
 export const getMe = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {

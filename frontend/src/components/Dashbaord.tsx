@@ -3,6 +3,7 @@ import { Sidebar } from "./Sidebar";
 import { TaskForm } from "./TaskForm";
 import { TaskList } from "./TaskList";
 import { MenuIcon } from "lucide-react";
+import TaskStatistics from "./TaskStatistics";
 
 
 export const Dashboard: React.FC = () => {
@@ -40,9 +41,10 @@ export const Dashboard: React.FC = () => {
                     <h1 className="text-xl font-bold">{getPageTitle()}</h1>
                 </header>
 
-                <main className="p-4 max-w-2xl mx-auto">
+                <main className="p-4 max-w-3xl mx-auto">
                     <TaskForm isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} activeFilter={activeFilter} />
                     <TaskList activeFilter={activeFilter} />
+                    <TaskStatistics />
                 </main>
             </div>
         </div>
