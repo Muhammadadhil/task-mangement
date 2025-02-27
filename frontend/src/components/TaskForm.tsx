@@ -3,6 +3,8 @@ import { PlusIcon, XIcon } from "lucide-react";
 import { useTasks } from "@/contexts/TaskContext";
 import { format } from "date-fns";
 import { Select, SelectItem, SelectTrigger, SelectContent, SelectValue } from "@/components/ui/select";
+import { taskStatus } from "@/types/task";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface TaskFormProps {
     isFormOpen: boolean;
@@ -12,25 +14,30 @@ interface TaskFormProps {
 
 export const TaskForm: React.FC<TaskFormProps> = ({ isFormOpen, setIsFormOpen, activeFilter }) => {
 
+    const { user } = useAuth();
     const { addTask } = useTasks();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [dueDate, setDueDate] = useState(format(new Date(), "yyyy-MM-dd"));
-    const [project, setProject] = useState(activeFilter !== "inbox" && activeFilter !== "today" && activeFilter !== "upcoming" ? activeFilter : "Work");
+    const [category, setCategory] = useState(activeFilter !== "inbox" && activeFilter !== "today" && activeFilter !== "upcoming" ? activeFilter : "Work");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!title.trim()) return;
 
+        console.log('user.id:',user?.id);
+
         addTask({
+            user: user?.id ?? "",
             title,
             description,
             dueDate: new Date(dueDate).toISOString(),
-            completed: false,
-            project,
+            status: taskStatus.PENDING,
+            category,
         });
 
+    
         // Reset form
         setTitle("");
         setDescription("");
@@ -87,14 +94,14 @@ export const TaskForm: React.FC<TaskFormProps> = ({ isFormOpen, setIsFormOpen, a
 
                     <div>
                         <label className="block text-sm mb-1">Project</label>
-                        <Select value={project} onValueChange={(value) => setProject(value)} >
-                            <SelectTrigger className="w-[180px] bg-white">
+                        <Select value={category} onValueChange={(value) => setCategory(value)} >
+                            <SelectTrigger className="w-[180px] bg-white text-black">
                                 <SelectValue placeholder="Select a project" />
                             </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="Work">Work</SelectItem>
-                                <SelectItem value="Personal">Personal</SelectItem>
-                                <SelectItem value="Study">Study</SelectItem>
+                            <SelectContent className="bg-white">
+                                <SelectItem value="work">Work</SelectItem>
+                                <SelectItem value="personal">Personal</SelectItem>
+                                <SelectItem value="study">Study</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>

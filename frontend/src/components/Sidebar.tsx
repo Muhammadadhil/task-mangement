@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { InboxIcon, CalendarIcon, ClockIcon, TagIcon, HomeIcon, PlusIcon, FolderIcon } from "lucide-react";
+import { InboxIcon, CalendarIcon, ClockIcon, FolderIcon } from "lucide-react";
 import { useTasks } from "@/contexts/TaskContext";
 import { ProfileDropdown } from "./ProfileDropdown";
 
@@ -13,7 +13,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ activeFilter, setActiveFilter, isSidebarOpen, toggleSidebar }) => {
 
     const { filteredTasks } = useTasks();
-    const [projects, setProjects] = useState<string[]>(["Work", "Personal", "Study"]);
+    const [categories, setCategories] = useState<string[]>(["work", "personal", "study"]);
 
     return (
         <div
@@ -68,15 +68,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeFilter, setActiveFilter,
                 <div className="mt-6">
                     <h2 className="text-sm font-semibold text-gray-500 mb-2">MY PROJECTS</h2>
                     <div className="space-y-1">
-                        {projects.map((project) => (
+                        {categories.map((category) => (
                             <button
-                                key={project}
-                                className={`flex items-center w-full p-2 rounded-md ${activeFilter === project ? "bg-primary/10 text-primary" : "hover:bg-gray-100"}`}
-                                onClick={() => setActiveFilter(project)}
+                                key={category}
+                                className={`flex items-center w-full p-2 rounded-md ${activeFilter === category ? "bg-primary/10 text-primary" : "hover:bg-gray-100"}`}
+                                onClick={() => setActiveFilter(category)}
                             >
                                 <div className="flex items-center gap-2">
                                     <FolderIcon className="h-5 w-5" />
-                                    <span>{project}</span>
+                                    <span>{category}</span>
                                 </div>
                             </button>
                         ))}

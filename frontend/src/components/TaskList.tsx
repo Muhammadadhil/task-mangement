@@ -20,6 +20,7 @@ export const TaskList: React.FC<TaskListProps> = ({ activeFilter }) => {
 
     return (
         <div className="bg-white rounded-md shadow-sm">
+            {activeFilter == "inbox" && <p className="text-gray-500 text-center"> pending tasks</p>}
             {tasks.map((task) => (
                 <TaskItem key={task._id} task={task} />
             ))}

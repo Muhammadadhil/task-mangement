@@ -24,7 +24,7 @@ export function ProfileDropdown() {
             <DropdownMenuContent className="m-2 w-60 bg-white dark:bg-gray-950 border shadow-md">
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium">{user?.name}</p>
+                        <p className="text-sm font-medium">{user?.email}</p>
                         {/* <p className="text-xs text-muted-foreground">0/5 tasks</p> */}
                     </div>
                 </DropdownMenuLabel>

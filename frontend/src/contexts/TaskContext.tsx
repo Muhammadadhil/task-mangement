@@ -17,27 +17,29 @@ interface TaskContextProps {
 const TaskContext = createContext<TaskContextProps | undefined>(undefined);
 
 export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-
     const [socket, setSocket] = useState<Socket | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const [tasks, setTasks] = useState<Task[]>([]);
     const { user } = useAuth();
+
+    console.log("user:", user);
 
     useEffect(() => {
         const socketInstance = io(import.meta.env.VITE_SOCKET_BACKEND_API || "http://localhost:3199", {
             reconnection: true,
             reconnectionAttempts: 5,
             reconnectionDelay: 1000,
-            transports: ["websocket", "polling"], 
+            transports: ["websocket", "polling"],
         });
 
         socketInstance.on("connect", async () => {
-
             console.log("Socket connected");
             setIsConnected(true);
 
-            const previousTasks = await getTasks(user?.id || '');
-            setTasks(previousTasks);
+            if (user?.id) {
+                const previousTasks = await getTasks(user?.id || "");
+                setTasks(previousTasks);
+            }
         });
 
         socketInstance.on("disconnect", () => {
@@ -54,7 +56,7 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         });
 
         socketInstance.on("task:deleted", (taskId: string) => {
-            toast('task successfully deleted');
+            toast("task successfully deleted");
             setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
         });
 
@@ -71,9 +73,22 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         };
     }, []);
 
-    const addTask = (taskData: Omit<Task, "id">) => {
+    useEffect(() => {
+        if (isConnected && user?.id) {
+            getTasks(user.id)
+                .then((previousTasks) => {
+                    console.log("Previous tasks of the user:", previousTasks);
+                    setTasks(previousTasks);
+                })
+                .catch((error) => {
+                    console.error("Error fetching tasks:", error);
+                });
+        }
+    }, [user, isConnected]);
+
+    const addTask = (taskData: Omit<Task, "_id">) => {
         if (socket && isConnected) {
-            socket.emit("task:add", taskData);
+            socket.emit("task:add", { ...taskData });
         }
     };
 

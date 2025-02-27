@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Base routes
 router.use("/api/auth", authRoutes);
-router.use('/api/tasks/:userId',taskRoutes)
+router.use('/api/tasks',taskRoutes)
 
 
 export default router;

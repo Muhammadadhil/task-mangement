@@ -15,6 +15,7 @@ export const addTask = async (task: ITask) => {
 export const getUsersTasks = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { userId } = req.params;
+        console.log('userId for tasksssssssssssssssssssssss:',userId);
         const tasks = await Task.find({user:userId});
         res.status(201).json(tasks);
     } catch (error) {

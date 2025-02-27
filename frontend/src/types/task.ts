@@ -1,3 +1,4 @@
+
 export enum TaskCategory {
     WORK = "work",
     STUDY = "study",
@@ -11,11 +12,11 @@ export enum taskStatus {
 
 
 export interface Task {
-    _id: string;
+    _id?: string;
     user: string;
     title: string;
     description: string;
     dueDate: string;
     status: taskStatus;
-    category: TaskCategory;
+    category: TaskCategory | string;
 }
