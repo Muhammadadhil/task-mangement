@@ -40,7 +40,7 @@ const SignupPage: React.FC = () => {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const navigate = useNavigate();
-    const { login, isAuthenticated } = useAuth();
+    const { isAuthenticated } = useAuth();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

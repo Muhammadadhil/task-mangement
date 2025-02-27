@@ -10,10 +10,10 @@ interface SidebarProps {
     toggleSidebar: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeFilter, setActiveFilter, isSidebarOpen, toggleSidebar }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ activeFilter, setActiveFilter, isSidebarOpen }) => {
 
     const { filteredTasks } = useTasks();
-    const [categories, setCategories] = useState<string[]>(["work", "personal", "study"]);
+    const [categories] = useState<string[]>(["work", "personal", "study"]);
 
     return (
         <div

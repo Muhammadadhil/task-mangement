@@ -15,7 +15,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
     const [isEditing, setIsEditing] = useState(false);
 
     const toggleCompleted = () => {
-        editTask(task._id, { status: task.status == taskStatus.PENDING ? taskStatus.COMPLETED:taskStatus.PENDING });
+        editTask(task._id || "", { status: task.status == taskStatus.PENDING ? taskStatus.COMPLETED:taskStatus.PENDING });
     };
 
     const handleStartEdit = () => {
@@ -71,7 +71,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
                         <button
                             className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 w-full text-left text-red-500"
                             onClick={() => {
-                                deleteTask(task._id);
+                                deleteTask(task._id || "");
                                 setIsMenuOpen(false);
                             }}
                         >

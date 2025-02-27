@@ -1,15 +1,9 @@
-// utils/auth.ts
 interface User {
     id: string;
     email: string;
     name?: string;
-    // Add other user properties you need
 }
 
-interface AuthData {
-    user: User;
-    accessToken: string;
-}
 
 export const setUserData = (userData: User): void => {
     localStorage.setItem("userData", JSON.stringify(userData));

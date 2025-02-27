@@ -24,13 +24,7 @@ export default function HomePage() {
                     </div>
 
                     <div className="relative flex-1">
-                        <img
-                            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-OjJroGOX20ttZtLj2TbBdkheoWWMAF.png"
-                            alt="Collaboration illustration"
-                            width={600}
-                            height={500}
-                            className="object-contain"
-                        />
+                        <img src="../assets/product-screenshot-board-gantt-views.avif" alt="Collaboration illustration" width={600} height={500} className="object-contain" />
                     </div>
                 </section>
 

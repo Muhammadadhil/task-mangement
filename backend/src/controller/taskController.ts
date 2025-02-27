@@ -14,7 +14,6 @@ export const addTask = async (task: ITask) => {
 export const getUsersTasks = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { userId } = req.params;
-        console.log("userId for taskss:", userId);
         const tasks = await Task.find({ user: userId });
         res.status(201).json(tasks);
     } catch (error) {
@@ -25,8 +24,6 @@ export const getUsersTasks = async (req: Request, res: Response, next: NextFunct
 export const getTaskStatistics = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const userId = req.user.id; 
-
-        console.log("userId for task statistics:", userId);
 
         // Get current date for comparison
         const today = new Date();

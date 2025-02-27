@@ -26,7 +26,7 @@ export const TaskEditForm: React.FC<TaskEditFormProps> = ({ task, onCancel }) =>
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        editTask(task._id, editedTask);
+        editTask(task._id || "", editedTask);
         onCancel();
     };
 

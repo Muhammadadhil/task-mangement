@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 
+
+body {
+  @apply font-Inter transition-colors duration-300 bg-white dark:bg-black text-gray-900 dark:text-gray-100;
+} 
+
+
 @layer base { 
   :root {
     --foreground: 222.2 84% 4.9%;
