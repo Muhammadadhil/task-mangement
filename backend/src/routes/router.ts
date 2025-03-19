@@ -1,7 +1,6 @@
 import express from "express";
 import authRoutes from "./authRoutes";
 import taskRoutes from './taskRoutes'
-// Import other route files here
 
 const router = express.Router();
 

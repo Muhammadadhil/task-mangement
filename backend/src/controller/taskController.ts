@@ -50,7 +50,6 @@ export const getTaskStatistics = async (req: Request, res: Response, next: NextF
             dueDate: { $lt: today },
         });
 
-        
         res.json({
             summary: {
                 completed: completedTasks,

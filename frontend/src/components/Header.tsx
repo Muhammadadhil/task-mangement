@@ -1,6 +1,8 @@
 import {Link} from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CoolMode } from "./magicui/cool-mode";
+import { ShimmerButton } from "./magicui/shimmer-button";
 
 export function Header() {
     return (
@@ -19,11 +21,14 @@ export function Header() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <Link to="/login" className="hidden md:inline-flex">
-                        Log in
-                    </Link>
-                    <Link to="/signup" className="hidden md:inline-flex bg-lime-300 text-primary rounded-xl px-4 py-2">
-                        Sign up
+                    <CoolMode>
+                        <Link to="/login" className="hidden md:inline-flex">
+                            Log in
+                        </Link>
+                    </CoolMode>
+
+                    <Link to="/signup">
+                        <ShimmerButton className="h-10 shadow-2xl">Sign up</ShimmerButton>
                     </Link>
                 </div>
             </div>

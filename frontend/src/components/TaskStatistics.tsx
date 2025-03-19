@@ -5,7 +5,7 @@ import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, P
 import { Pie } from "react-chartjs-2";
 import { toast } from "sonner";
 import { TaskStatistics as TaskStatsType } from "../types/statistics";
-
+import { useTasks } from "@/contexts/TaskContext";
 
 // Register ChartJS components
 ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, PointElement, LineElement, Title, Tooltip, Legend);
@@ -15,6 +15,7 @@ const TaskStatistics: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const { user } = useAuth();
 
+    const { tasks } = useTasks();
 
     useEffect(() => {
         const fetchStatistics = async () => {
@@ -33,7 +34,7 @@ const TaskStatistics: React.FC = () => {
         };
 
         fetchStatistics();
-    }, [user]);
+    }, [user,tasks]);
 
     if (loading) {
         return <div className="flex justify-center p-8">Loading statistics...</div>;

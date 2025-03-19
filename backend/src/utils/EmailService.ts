@@ -15,17 +15,6 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-//  const transpoter = nodemailer.createTransport({
-//      host: "smtp.gmail.com",
-//      port: 587,
-//      secure: false,
-//      requireTLS: true,
-//      auth: {
-//          user: process.env.NODEMAILER_USER,
-//          pass: process.env.NODEMAILER_USER_PASSWORD,
-//      },
-//  });
-
 // Send verification email
 export const sendVerificationEmail = async (email: string, token: string): Promise<void> => {
     const verificationUrl = `${process.env.PRODUCTION_ORIGIN}/verify-email/${token}`;

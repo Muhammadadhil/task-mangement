@@ -1,6 +1,5 @@
 import { signIn } from "@/api/auth";
 import PasswordField from "@/components/passwordField";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,6 +7,9 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import dreampc from "../../public/assets/dreampcc.jpeg";
+import { RainbowButton } from "@/components/magicui/rainbow-button";
+
 
 interface LoginFormData {
     email: string;
@@ -93,8 +95,8 @@ const LoginPage: React.FC = () => {
             {isLoading ? (
                 <div className="animate-spin h-5 w-5 border-b-2 border-lime-400 m-auto"></div>
             ) : (
-                <div className="w-full max-w-[1200px] h-full mx-auto flex items-center justify-between gap-28 p-8">
-                    <div className="w-[440px]">
+                <div className="w-full h-full mx-auto flex items-center justify-between gap-28">
+                    <div className=" w-[500px] p-8 mx-auto ">
                         <h1 className="text-2xl font-semibold text-gray-900 mb-8">Welcome to Taskify</h1>
 
                         <form onSubmit={handleLoginSubmit} className="space-y-6">
@@ -114,24 +116,24 @@ const LoginPage: React.FC = () => {
                             </div>
 
                             <div className="space-y-2">
-                                <PasswordField value={formData.password} onChange={handleInputChange}  />
+                                <PasswordField value={formData.password} onChange={handleInputChange} />
                             </div>
 
-                            <Button type="submit" className="w-full h-12 bg-lime-400 hover:bg-lime-400 text-white rounded-lg font-medium">
+                            <RainbowButton type="submit" className="w-full h-12">
                                 Log in
-                            </Button>
+                            </RainbowButton>
 
                             <div className="text-center text-sm text-gray-600">
                                 Don't have an account?{" "}
-                                <Link to="/signup" className="text-lime-500 hover:text-lime-600">
+                                <Link to="/signup" className="text-gray-800 hover:text-gray-700">
                                     Sign up
                                 </Link>
                             </div>
                         </form>
                     </div>
 
-                    <div className="flex-1 flex justify-end items-center">
-                        <img src="../assets/videoframe_2125.png" alt="image" />
+                    <div className="fw-full h-screen lex-1 flex justify-end items-center flex-wrap">
+                        <img src={dreampc} alt="image" className="w-full h-full object-cover" />
                     </div>
                 </div>
             )}

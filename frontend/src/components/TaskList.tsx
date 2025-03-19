@@ -13,14 +13,13 @@ export const TaskList: React.FC<TaskListProps> = ({ activeFilter }) => {
     if (tasks.length === 0) {
         return (
             <div className="text-center py-8 text-gray-500">
-                <p>No tasks found for this filter.</p>
+                <p>No tasks found for {activeFilter}.</p>
             </div>
         );
     }
 
     return (
         <div className="bg-white rounded-md shadow-sm">
-            {activeFilter == "inbox" && <p className="text-gray-500 text-center"> pending tasks</p>}
             {tasks.map((task) => (
                 <TaskItem key={task._id} task={task} />
             ))}
