@@ -12,21 +12,18 @@ interface TaskFormProps {
     activeFilter: string;
 }
 
-export const TaskForm: React.FC<TaskFormProps> = ({ isFormOpen, setIsFormOpen, activeFilter }) => {
-
+export const TaskForm: React.FC<TaskFormProps> = ({ isFormOpen, setIsFormOpen, activeFilter}) => {
     const { user } = useAuth();
     const { addTask } = useTasks();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [dueDate, setDueDate] = useState(format(new Date(), "yyyy-MM-dd"));
-    const [category, setCategory] = useState(activeFilter !== "inbox" && activeFilter !== "today" && activeFilter !== "upcoming" ? activeFilter : "Work");
+    const [category, setCategory] = useState(activeFilter !== "inbox" && activeFilter !== "today" && activeFilter !== "upcoming" ? activeFilter : "work");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!title.trim()) return;
-
-        console.log('user.id:',user?.id);
 
         addTask({
             user: user?.id ?? "",
@@ -37,7 +34,6 @@ export const TaskForm: React.FC<TaskFormProps> = ({ isFormOpen, setIsFormOpen, a
             category,
         });
 
-    
         // Reset form
         setTitle("");
         setDescription("");
@@ -94,7 +90,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({ isFormOpen, setIsFormOpen, a
 
                     <div>
                         <label className="block text-sm mb-1">Project</label>
-                        <Select value={category} onValueChange={(value) => setCategory(value)} >
+                        <Select value={category} onValueChange={(value) => setCategory(value)}>
                             <SelectTrigger className="w-[180px] bg-white text-black">
                                 <SelectValue placeholder="Select a project" />
                             </SelectTrigger>
@@ -111,7 +107,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({ isFormOpen, setIsFormOpen, a
                     <button type="button" onClick={() => setIsFormOpen(false)} className="px-4 py-2 rounded-xl bg-zinc-200 hover:bg-zinc-400">
                         Cancel
                     </button>
-                    <button type="submit" className="px-4 py-2 bg-primary rounded-xl hover:bg-primary-dark bg-lime-300">
+                    <button type="submit" className="px-4 py-2 bg-primary rounded-xl hover:bg-primary-dark text-white bg-green-600">
                         Add Task
                     </button>
                 </div>

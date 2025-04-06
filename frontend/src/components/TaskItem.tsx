@@ -7,27 +7,28 @@ import { TaskEditForm } from "./TaskEditForm";
 
 interface TaskItemProps {
     task: Task;
+    editingTask: { id: string; status: boolean };
+    setEditingTask: React.Dispatch<React.SetStateAction<{ id: string; status: boolean }>>;
 }
 
-export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
+export const TaskItem: React.FC<TaskItemProps> = ({ task, editingTask, setEditingTask }) => {
     const { editTask, deleteTask } = useTasks();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
 
     const toggleCompleted = () => {
-        editTask(task._id || "", { status: task.status == taskStatus.PENDING ? taskStatus.COMPLETED:taskStatus.PENDING });
+        editTask(task._id || "", { status: task.status == taskStatus.PENDING ? taskStatus.COMPLETED : taskStatus.PENDING });
     };
 
-    const handleStartEdit = () => {
-        setIsEditing(true);
+    const handleStartEdit = (id: string) => {
+        setEditingTask({ id, status: true });
         setIsMenuOpen(false);
     };
 
     const handleCancelEdit = () => {
-        setIsEditing(false);
+        setEditingTask({ id: "", status: false });
     };
 
-    if (isEditing) {
+    if (editingTask.id == task._id && editingTask.status) {
         return <TaskEditForm task={task} onCancel={handleCancelEdit} />;
     }
 
@@ -64,7 +65,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
 
                 {isMenuOpen && (
                     <div className="absolute right-0 mt-1 w-36 bg-white rounded-md shadow-lg border z-10">
-                        <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 w-full text-left" onClick={handleStartEdit}>
+                        <button className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 w-full text-left" onClick={() => handleStartEdit(task._id ?? '')}>
                             <PencilIcon className="h-4 w-4" />
                             <span>Edit</span>
                         </button>

@@ -54,9 +54,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         localStorage.setItem("userData", JSON.stringify(authData.user));
         localStorage.setItem("accessToken", authData.accessToken);
         setIsAuthenticated(true);
-
-        console.log("user: and accesstoken:", user, accessToken);
-        console.log("isAuthenticated", !!user && !!accessToken);
     };
 
     const logout = () => {

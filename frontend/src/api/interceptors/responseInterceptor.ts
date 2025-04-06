@@ -12,7 +12,6 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 export const handleErrorResponseInterceptor = async (error: AxiosError) => {
 
     const originalRequest: CustomAxiosRequestConfig = error.config!;
-    console.log("axios instance error:", error.response);
 
      if (!error.response || !originalRequest) {
          console.error("Unexpected error structure:", error);
@@ -23,10 +22,7 @@ export const handleErrorResponseInterceptor = async (error: AxiosError) => {
         originalRequest._retry = true;
 
         try {
-            console.log("requesting for refresh token !!!!");
-
             const newAccessToken = await refreshToken();
-
             setAccessToken(newAccessToken);
 
             originalRequest.headers["Authorisation"] = `Bearer ${newAccessToken}`;

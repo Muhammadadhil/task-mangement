@@ -1,10 +1,11 @@
 import { Clock, Users, BarChart2, Star, ArrowRight, Calendar, ListTodo, MessageSquare } from "lucide-react";
 import { Header } from "@/components/Header";
+import { Link } from "react-router-dom";
 
 function HomePage() {
     return (
         <div className="min-h-screen bg-white">
-            <Header/>
+            <Header />
             <section className="relative overflow-hidden bg-gray-50 py-16 sm:py-24">
                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
                     <div className="mx-auto max-w-2xl text-center">
@@ -13,9 +14,11 @@ function HomePage() {
                             Streamline your workflow, boost productivity, and collaborate seamlessly with TaskFlow's intuitive task management platform.
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
-                            <button className="rounded-md bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
-                                Get started for free
-                            </button>
+                            <Link to={'/login'}>
+                                <button className="rounded-md bg-green-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
+                                    Get started for free
+                                </button>
+                            </Link>
                             <button className="flex items-center text-sm font-semibold leading-6 text-gray-900">
                                 Watch demo <ArrowRight className="ml-2 h-4 w-4" />
                             </button>

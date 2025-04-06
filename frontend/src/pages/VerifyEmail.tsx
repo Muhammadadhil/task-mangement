@@ -7,19 +7,14 @@ const EmailVerification: React.FC = () => {
     const [status, setStatus] = useState<"loading" | "success" | "failed">("loading");
     const [message, setMessage] = useState<string>("");
 
-    console.log("token:", token);
-
     useEffect(() => {
         const verifyEmail = async () => {
             try {
-                const response = await verifyEmailApi(token!);
-                const data = response.data;
-                console.log(data);
+                await verifyEmailApi(token!);
                 setStatus("success");
                 setMessage("Email verified successfully!");
                
-            } catch (error) {
-                console.log(error);
+            } catch {
                 setStatus("failed");
                 setMessage("An error occurred while verifying your email. Please try again later.");
             }
@@ -40,7 +35,7 @@ const EmailVerification: React.FC = () => {
                 <p className="text-center text-gray-600">{message}</p>
                 <div className="mt-4 flex justify-center">
                     <Link to="/">
-                        <button className="bg-lime-300 hover:bg-primary-700 text-gray-800 font-bold py-2 px-4 rounded">
+                        <button className="bg-green-600 hover:bg-primary-700 text-gray-800 font-bold py-2 px-4 rounded">
                             Back to Home
                         </button>
                     </Link>

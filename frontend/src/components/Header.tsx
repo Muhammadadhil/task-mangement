@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown, Menu, X, LayoutDashboard, Calendar, Users, Settings, HelpCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
 import { CoolMode } from "./magicui/cool-mode";
 import { ShimmerButton } from "./magicui/shimmer-button";
 
@@ -51,7 +50,7 @@ export function Header() {
                                 Log in
                             </Link>
                             <Link to="/signup" className="w-full" onClick={() => setIsMenuOpen(false)}>
-                                <ShimmerButton className="w-full">Sign up</ShimmerButton>
+                                <ShimmerButton className="w-full bg-green-600">Sign up</ShimmerButton>
                             </Link>
                         </div>
                     </div>

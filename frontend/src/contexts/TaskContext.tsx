@@ -4,8 +4,6 @@ import { Task, taskStatus } from "@/types/task";
 import { useAuth } from "./AuthContext";
 import { getTasks } from "@/api/tasks";
 import { toast } from "sonner";
-// import { getTaskStatistics } from "@/api/statistics";
-// import { TaskStatistics } from "@/types/statistics";
 
 interface TaskContextProps {
     tasks: Task[];
@@ -22,10 +20,7 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const [socket, setSocket] = useState<Socket | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const [tasks, setTasks] = useState<Task[]>([]);
-    // const [taskStatistics, setTaskStatistics] = useState<TaskStatistics>();
     const { user } = useAuth();
-
-    console.log("user:", user);
 
     useEffect(() => {
         const socketInstance = io(import.meta.env.VITE_SOCKET_BACKEND_API || "http://localhost:3199", {
@@ -36,21 +31,15 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         });
 
         socketInstance.on("connect", async () => {
-            console.log("Socket connected");
             setIsConnected(true);
 
             if (user?.id) {
                 const previousTasks = await getTasks(user?.id || "");
-                // const previousStatistics = await getTaskStatistics();
                 setTasks(previousTasks);
-                // if (previousStatistics) {
-                //     setTaskStatistics(previousStatistics);
-                // }
             }
         });
 
         socketInstance.on("disconnect", () => {
-            console.log("Socket disconnected");
             setIsConnected(false);
         });
 
@@ -85,7 +74,6 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         if (isConnected && user?.id) {
             getTasks(user.id)
                 .then((previousTasks) => {
-                    console.log("Previous tasks of the user:", previousTasks);
                     setTasks(previousTasks);
                 })
                 .catch((error) => {

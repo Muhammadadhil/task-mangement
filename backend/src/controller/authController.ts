@@ -20,8 +20,6 @@ export const register = async (req: Request, res: Response, next: NextFunction):
 
         // Create verification token
         const verificationToken = crypto.randomBytes(20).toString("hex");
-        console.log('verification Token:',verificationToken);
-
         // Create new user
         const user = await User.create({
             name,
@@ -132,8 +130,6 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 export const verifyEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { token } = req.params;
-        console.log('tokennn:',token);
-
         // Find user by verification token
         const user = await User.findOne({ verificationToken: token });
 
@@ -181,7 +177,6 @@ export const refreshAccessToken = async (req: Request, res: Response): Promise<R
 
             const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESHTOKEN_SECRET!) as JwtPayload;
             if (!decoded) {
-                console.log("invalid token");
                 // return null;
             }
             const { id } = decoded;

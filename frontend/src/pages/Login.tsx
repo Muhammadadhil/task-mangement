@@ -64,7 +64,6 @@ const LoginPage: React.FC = () => {
         try {
             setIsLoading(true);
             const response = (await signIn(formData)) as LoginResponse;
-            console.log("response", response);
             setIsLoading(false);
 
             login({

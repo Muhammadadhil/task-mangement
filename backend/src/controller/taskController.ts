@@ -17,7 +17,7 @@ export const getUsersTasks = async (req: Request, res: Response, next: NextFunct
         const tasks = await Task.find({ user: userId });
         res.status(201).json(tasks);
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 };
 
@@ -35,14 +35,10 @@ export const getTaskStatistics = async (req: Request, res: Response, next: NextF
             status: taskStatus.COMPLETED,
         });
 
-        console.log("completedTasks:", completedTasks);
-
         const pendingTasks = await Task.countDocuments({
             user:userId,
             status: { $ne: taskStatus.COMPLETED },
         });
-
-        console.log("pendingTasks:", pendingTasks);
 
         const overdueTasks = await Task.countDocuments({
             user: userId,

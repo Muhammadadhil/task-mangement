@@ -149,7 +149,7 @@ const SignupPage: React.FC = () => {
             {/* Right side - Signup form */}
             <div className="w-full md:w-1/2 bg-white flex items-center justify-center p-6">
                 {isLoading ? (
-                    <div className="animate-spin h-8 w-8 border-b-2 border-lime-400 rounded-full"></div>
+                    <div className="animate-spin h-8 w-8 border-b-2 border-green-600 rounded-full"></div>
                 ) : (
                     <div className="w-full max-w-md">
                         {/* Mobile-only logo */}

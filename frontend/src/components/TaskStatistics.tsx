@@ -24,7 +24,6 @@ const TaskStatistics: React.FC = () => {
             try {
                 setLoading(true);
                 const data = await getTaskStatistics();
-                console.log('data for statistics:', data);
                 setStatistics(data);
             } catch {
                 toast.error("Failed to load statistics");
