@@ -123,13 +123,46 @@ const SignupPage: React.FC = () => {
     };
 
     return (
-        <div className="flex w-full h-screen bg-gray-50">
-            {isLoading ? (
-                <div className="animate-spin h-5 w-5 border-b-2 border-lime-400 m-auto"></div>
-            ) : (
-                <div className="w-full h-full mx-auto flex items-center justify-between gap-28">
-                    <div className=" w-[500px] p-8 mx-auto ">
-                        <h1 className="text-2xl font-semibold text-gray-900 mb-8">Create your account</h1>
+        <div className="flex h-screen w-full overflow-hidden">
+            {/* Left side - Dark background with branding */}
+            <div className="hidden md:flex md:w-1/2 bg-black text-white flex-col relative">
+                {/* Logo/Brand at top */}
+                <div className="absolute top-0 left-0 p-8 z-10">
+                    <Link to="/" className="flex items-center space-x-2">
+                        <span className="text-xl font-bold">TaskFlow</span>
+                    </Link>
+                </div>
+
+                {/* Full-height image with overlay */}
+                <div className="relative w-full h-full">
+                    <div className="absolute inset-0 bg-black/50 z-[1]"></div>
+                    <img src={dreampc || "/placeholder.svg"} alt="Workspace" className="w-full h-full object-cover" />
+                </div>
+
+                {/* Motivation Text at bottom */}
+                <div className="absolute bottom-0 left-0 p-8 z-10">
+                    <h2 className="text-lg font-semibold text-white">Stay focused. Stay organized.</h2>
+                    <p className="mt-2 text-sm text-gray-400">Manage your tasks efficiently and boost your productivity with TaskFlow Tasks.</p>
+                </div>
+            </div>
+
+            {/* Right side - Signup form */}
+            <div className="w-full md:w-1/2 bg-white flex items-center justify-center p-6">
+                {isLoading ? (
+                    <div className="animate-spin h-8 w-8 border-b-2 border-lime-400 rounded-full"></div>
+                ) : (
+                    <div className="w-full max-w-md">
+                        {/* Mobile-only logo */}
+                        <div className="md:hidden mb-8">
+                            <Link to="/" className="flex items-center space-x-2">
+                                <span className="text-xl font-bold">TaskFlow</span>
+                            </Link>
+                        </div>
+
+                        <div className="mb-8">
+                            <h1 className="text-2xl font-semibold text-gray-900">Create your account</h1>
+                            <p className="text-gray-600 mt-2">Start managing your tasks effortlessly</p>
+                        </div>
 
                         <form onSubmit={handleSignupSubmit} className="space-y-6">
                             <div className="space-y-2">
@@ -146,6 +179,7 @@ const SignupPage: React.FC = () => {
                                     placeholder="John Doe"
                                 />
                             </div>
+
                             <div className="space-y-2">
                                 <Label htmlFor="email" className="text-sm text-gray-600">
                                     Email
@@ -160,34 +194,47 @@ const SignupPage: React.FC = () => {
                                     placeholder="johndoe@gmail.com"
                                 />
                             </div>
+
                             <div className="space-y-2">
                                 <PasswordField value={formData.password} onChange={handleInputChange} name="password" placeholder="Create a password" />
                             </div>
+
                             <div className="space-y-2">
                                 <PasswordField value={formData.confirmPassword} onChange={handleInputChange} name="confirmPassword" placeholder="Confirm your password" />
                             </div>
-                            {/* <Button type="submit" className="w-full h-12 bg-lime-400 hover:bg-lime-500 text-white rounded-lg font-medium">
-                                Create Account
-                            </Button> */}
+
                             <RainbowButton type="submit" className="w-full h-12">
                                 Create Account
                             </RainbowButton>
+
+                            <div className="relative my-6">
+                                <div className="absolute inset-0 flex items-center">
+                                    <div className="w-full border-t border-gray-200"></div>
+                                </div>
+                                <div className="relative flex justify-center text-sm">
+                                    <span className="px-2 bg-white text-gray-500">Or</span>
+                                </div>
+                            </div>
+
                             <div className="text-center text-sm text-gray-600">
                                 Already have an account?{" "}
-                                <Link to="/login" className="text-gray-800 hover:text-gray-700">
+                                <Link to="/login" className="text-gray-800 font-medium hover:underline">
                                     Sign in
                                 </Link>
                             </div>
                         </form>
                     </div>
+                )}
+            </div>
 
-                    <div className="fw-full h-screen lex-1 flex justify-end items-center flex-wrap">
-                        <img src={dreampc} alt="image" className="w-full h-full object-cover" />
-                    </div>
-                </div>
-            )}
+            {/* Mobile-only image at bottom */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 h-32 z-[-1]">
+                <img src={dreampc || "/placeholder.svg"} alt="Workspace" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+            </div>
         </div>
     );
+
 };
 
 export default SignupPage;

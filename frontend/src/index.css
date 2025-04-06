@@ -5,7 +5,7 @@
 
 
 body {
-  @apply font-Inter transition-colors duration-300 bg-white dark:bg-black text-gray-900 dark:text-gray-100;
+  @apply transition-colors duration-300 bg-white dark:bg-black text-gray-900 dark:text-gray-100;
 } 
 
 
